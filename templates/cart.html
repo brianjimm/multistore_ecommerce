@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - MultiStore{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Shopping Cart</h1>
+    
+    {% if cart_items %}
+        <div class="cart-items">
+            {% for item in cart_items %}
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <h3>{{ item.product.name }}</h3>
+                    <p>{{ item.product.description }}</p>
+                </div>
+                <div class="cart-item-price">${{ "%.2f"|format(item.product.price) }}</div>
+                <div class="cart-item-quantity">Qty: {{ item.quantity }}</div>
+                <div class="cart-item-subtotal">${{ "%.2f"|format(item.subtotal) }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="cart-summary">
+            <div class="cart-total">
+                <h3>Total: ${{ "%.2f"|format(total) }}</h3>
+            </div>
+            <form method="POST" action="{{ url_for('checkout') }}">
+                <button type="submit" class="btn btn-primary">Proceed to Checkout</button>
+            </form>
+        </div>
+    {% else %}
+        <div class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h2>Your cart is empty</h2>
+            <p>Start shopping to add items to your cart</p>
+            <a href="{{ url_for('home') }}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
