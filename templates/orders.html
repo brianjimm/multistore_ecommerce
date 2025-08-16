@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Order History - MultiStore{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Order History</h1>
+    
+    {% if orders %}
+        <div class="orders-list">
+            {% for order in orders %}
+            <div class="order-card">
+                <div class="order-header">
+                    <h3>Order #{{ order.id }}</h3>
+                    <span class="order-status status-{{ order.status }}">{{ order.status.title() }}</span>
+                </div>
+                <div class="order-details">
+                    <p>Date: {{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                    <p>Total: ${{ "%.2f"|format(order.total_amount) }}</p>
+                </div>
+                <div class="order-items">
+                    {% for item in order.items %}
+                        <div class="order-item">
+                            <span>{{ item.product.name }} x{{ item.quantity }}</span>
+                            <span>${{ "%.2f"|format(item.price * item.quantity) }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-orders">
+            <i class="fas fa-receipt"></i>
+            <h2>No orders yet</h2>
+            <p>Your order history will appear here once you make your first purchase</p>
+            <a href="{{ url_for('home') }}" class="btn btn-primary">Start Shopping</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
