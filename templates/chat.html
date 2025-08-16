@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Customer Support Chat - MultiStore{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2><i class="fas fa-comments"></i> Customer Support</h2>
+            <p>Chat with our support team for any questions or assistance</p>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            {% for message in messages %}
+                <div class="message {{ 'sent' if message.sender_id == current_user.id else 'received' }}">
+                    <div class="message-content">
+                        {{ message.content }}
+                    </div>
+                    <div class="message-info">
+                        <span class="message-sender">
+                            {% if message.sender_id == current_user.id %}
+                                You
+                            {% else %}
+                                Support Team
+                            {% endif %}
+                        </span>
+                        <span class="message-time">{{ message.timestamp.strftime('%I:%M %p') }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <form class="chat-form" method="POST" action="{{ url_for('send_message') }}">
+            <div class="chat-input-group">
+                <input type="text" name="message" placeholder="Type your message..." required>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
