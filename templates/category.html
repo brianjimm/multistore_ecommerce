@@ -1,1 +1,34 @@
+{% extends "base.html" %}
 
+{% block title %}{{ category.name }} - MultiStore{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="category-header">
+        <h1>{{ category.name }}</h1>
+        <p>{{ category.description }}</p>
+    </div>
+    
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-image">
+                <i class="fas fa-box"></i>
+            </div>
+            <div class="product-info">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+                <div class="product-price">${{ "%.2f"|format(product.price) }}</div>
+                <div class="product-stock">Stock: {{ product.stock }}</div>
+                <div class="product-actions">
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-primary btn-sm">View Details</a>
+                    {% if current_user.is_authenticated and product.stock > 0 %}
+                        <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn btn-secondary btn-sm">Add to Cart</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
